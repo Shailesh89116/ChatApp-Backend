@@ -36,7 +36,7 @@ const accessChat=async(req,res)=>{
         try {
             const createChat= await Chat.create(chatData);
 
-            const fullChat= await Chat.findOne({_id: createChat._id}).populate("User","-password");
+            const fullChat= await Chat.findOne({_id: createChat._id}).populate("users","-password");
 
             res.status(200).send(fullChat)
         } catch (error) {
