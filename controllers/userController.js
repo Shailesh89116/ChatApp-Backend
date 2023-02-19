@@ -6,7 +6,7 @@ const bcrypt=require('bcryptjs');
 
 const register=async(req,res)=>{
     try {
-        const {name,email,password,pic}=req.body;
+        const {name,email,password,picture}=req.body;
   
     if(!name || !email || !password){
         res.status(400).json({message:"Please Enter All the Fields"});
@@ -17,7 +17,7 @@ const register=async(req,res)=>{
         return
     }
 
-    const user=await User.create({name,email,password,pic});
+    const user=await User.create({name,email,password,picture});
     await user.save();
     if(user){
         res.status(200).json({
@@ -38,10 +38,10 @@ const login=async(req,res)=>{
         const { email, password } = req.body;
       
         const user = await User.findOne({email});
-      
-        const match=await user.matchPassword(password);
-        console.log(match);
-        if (user && !match) {
+        const isMatch = await bcrypt.compare(password, user.password)
+        // const isMatch = await user.matchPassword(password)
+        console.log(user);
+        if (user && !isMatch) {
           res.send({
             _id: user._id,
             name: user.name,
